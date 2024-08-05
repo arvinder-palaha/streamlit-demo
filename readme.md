@@ -26,9 +26,9 @@ Can connect via mongodb compass with connection string: `mongodb://localhost:270
 
 - [X] streamlit server
 - [X] streamlit multi page
-- [ ] mongodb server
+- [X] mongodb server
 - [ ] mongodb access in streamlit app
 - [ ] upload json blob to DB
 - [ ] upload csv to DB
 - [ ] dockerise the streamlit server
-- [ ] dockerise the mongodb server
+- [X] dockerise the mongodb server

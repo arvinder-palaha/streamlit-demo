@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import pymongo
 
 st.title('Uber picks up in nyc')
 
@@ -37,3 +38,34 @@ hour_to_filter = st.slider('hour', 0, 23, 17)  # min: 0h, max: 23h, default: 17h
 filtered_data = data[data[DATE_COLUMN].dt.hour == hour_to_filter]
 st.subheader(f'Map of all pickups at {hour_to_filter}:00')
 st.map(filtered_data)
+
+
+# Initialize connection.
+# Uses st.cache_resource to only run once.
+@st.cache_resource
+def init_connection():
+    return pymongo.MongoClient(**st.secrets["mongo"])
+
+client = init_connection()
+
+# Pull data from the collection.
+# Uses st.cache_data to only rerun when the query changes or after 10 min.
+# @st.cache_data(ttl=600)
+def get_data():
+    db = client['streamlit-demo-db']
+    my_col = db['test']
+    cursor = my_col.find({})
+    data_list = []
+    for document in cursor:
+        data_list.append(document)
+    return data_list
+
+items = get_data()
+
+# Print results.
+for item in items:
+    # st.write(f"{item['name']} has a :{item['pet']}:")
+    st.write(f"{item}")
+
+if(len(items)==0):
+    st.write("Aww crap")
