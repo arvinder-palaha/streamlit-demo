@@ -11,8 +11,9 @@ def test_parse_input_returns_empty_list_when_given_whitespace():
     result = parse_db_inspect_input('  ')
     assert(0 == len(result))
 
-# def test_parse_input_returns_empty_list_when_given_just_commas():
-#     pass
+def test_parse_input_returns_empty_list_when_given_just_commas():
+    result = parse_db_inspect_input(',,,')
+    assert(0 == len(result))
 
 # def test_parse_input_returns_empty_list_when_given_commans_and_whitespace():
 #     pass
