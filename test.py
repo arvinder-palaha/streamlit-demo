@@ -32,3 +32,7 @@ def test_parse_input_returns_only_dbname(input_string):
 def test_parse_input_returns_2_keys(input_string):
     result = parse_db_inspect_input(input_string)
     assert result == ['db_name', 'col_name']
+    
+def test_parse_input_keeps_space_in_key():
+    result = parse_db_inspect_input('db name, ')
+    assert result == ['db name']
