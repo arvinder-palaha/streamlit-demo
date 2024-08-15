@@ -1,7 +1,10 @@
+from typing import List
 import streamlit as st
 import pandas as pd
 import numpy as np
 import pymongo
+
+from src.functions import parse_db_inspect_input
 
 st.title('Uber picks up in nyc')
 
@@ -48,24 +51,25 @@ def init_connection():
 
 client = init_connection()
 
-# Pull data from the collection.
-# Uses st.cache_data to only rerun when the query changes or after 10 min.
-# @st.cache_data(ttl=600)
-def get_data():
-    db = client['streamlit-demo-db']
-    my_col = db['test']
-    cursor = my_col.find({})
-    data_list = []
+input = st.text_input("Inspect database with comma separated keys:")
+
+st.write(input)
+st.write(len(input))
+input_keys = parse_db_inspect_input(input)
+num_input_keys = len(input_keys)
+
+if num_input_keys==0:
+    st.write(client.list_database_names())
+if num_input_keys==1:
+    st.write(client[input_keys[0]].list_collection_names())
+if num_input_keys==2:
+    cursor = client[input_keys[0]][input_keys[1]].find({})
+    documents = []
     for document in cursor:
-        data_list.append(document)
-    return data_list
+        documents.append(document)
+    st.write(documents)
+if num_input_keys==3:
+    st.write('show field')
+    cursor = client[input_keys[0]][input_keys[1]].find({})
+    
 
-items = get_data()
-
-# Print results.
-for item in items:
-    # st.write(f"{item['name']} has a :{item['pet']}:")
-    st.write(f"{item}")
-
-if(len(items)==0):
-    st.write("Aww crap")
