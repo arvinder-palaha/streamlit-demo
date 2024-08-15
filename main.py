@@ -1,8 +1,8 @@
-from typing import List
 import streamlit as st
 import pandas as pd
 import numpy as np
 import pymongo
+import ast
 
 from src.functions import parse_db_inspect_input
 
@@ -69,7 +69,10 @@ if num_input_keys==2:
         documents.append(document)
     st.write(documents)
 if num_input_keys==3:
-    st.write('show field')
-    cursor = client[input_keys[0]][input_keys[1]].find({})
-    
-
+    thing = ast.literal_eval(input_keys[2])
+    print(thing)
+    cursor = client[input_keys[0]][input_keys[1]].find(thing)
+    documents = []
+    for document in cursor:
+        documents.append(document)
+    st.write(documents)    
