@@ -4,7 +4,7 @@ import numpy as np
 import pymongo
 import ast
 
-from src.functions import parse_db_inspect_input
+from src.functions import parse_db_inspect_input, find_documents_from_collection
 
 st.title('Uber picks up in nyc')
 
@@ -63,16 +63,11 @@ if num_input_keys==0:
 if num_input_keys==1:
     st.write(client[input_keys[0]].list_collection_names())
 if num_input_keys==2:
-    cursor = client[input_keys[0]][input_keys[1]].find({})
-    documents = []
-    for document in cursor:
-        documents.append(document)
+    collection = client[input_keys[0]][input_keys[1]]
+    documents = find_documents_from_collection(collection)
     st.write(documents)
 if num_input_keys==3:
-    thing = ast.literal_eval(input_keys[2])
-    print(thing)
-    cursor = client[input_keys[0]][input_keys[1]].find(thing)
-    documents = []
-    for document in cursor:
-        documents.append(document)
+    collection = client[input_keys[0]][input_keys[1]]
+    search_key = ast.literal_eval(input_keys[2])
+    documents = find_documents_from_collection(collection, search_key)
     st.write(documents)    
