@@ -1,6 +1,7 @@
+from unittest.mock import MagicMock
 import pytest
 
-from src.functions import parse_db_inspect_input
+from src.functions import parse_db_inspect_input, find_documents_from_collection
 
 @pytest.mark.parametrize("input_string", [
     '',           # Empty input
@@ -36,3 +37,22 @@ def test_parse_input_returns_2_keys(input_string):
 def test_parse_input_keeps_space_in_key():
     result = parse_db_inspect_input('db name, ')
     assert result == ['db name']
+
+import pytest
+from unittest.mock import MagicMock
+
+@pytest.mark.parametrize("search_dict, mock_documents, expected_result", [
+    ({}, [], []),  # Empty collection with default search_dict
+    ({}, [{'_id': 1, 'name': 'doc1'}, {'_id': 2, 'name': 'doc2'}], [{'_id': 1, 'name': 'doc1'}, {'_id': 2, 'name': 'doc2'}]),  # Non-empty collection with default search_dict
+    ({'name': 'doc1'}, [{'_id': 1, 'name': 'doc1'}], [{'_id': 1, 'name': 'doc1'}]),  # Specific search_dict
+    ({'name': 'nonexistent'}, [], []),  # No matching documents
+    ({}, [{'_id': i, 'name': f'doc{i}'} for i in range(1000)], [{'_id': i, 'name': f'doc{i}'} for i in range(1000)])  # Large number of documents
+])
+def test_find_documents_from_collection(search_dict, mock_documents, expected_result):
+    mock_collection = MagicMock()
+    mock_collection.find.return_value = mock_documents
+    
+    result = find_documents_from_collection(mock_collection, search_dict)
+    
+    assert result == expected_result
+    mock_collection.find.assert_called_once_with(search_dict)
