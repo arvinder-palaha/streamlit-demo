@@ -29,7 +29,7 @@ Can connect via mongodb compass with connection string: `mongodb://localhost:270
 - [X] mongodb server
 - [X] mongodb access in streamlit app
 - [x] explore mongodb database
-- [ ] upload json blob to DB
+- [x] upload json item to DB
 - [ ] upload csv to DB
 - [ ] dockerise the streamlit server
 - [X] dockerise the mongodb server
