@@ -38,8 +38,6 @@ def test_parse_input_keeps_space_in_key():
     result = parse_db_inspect_input('db name, ')
     assert result == ['db name']
 
-import pytest
-from unittest.mock import MagicMock
 
 @pytest.mark.parametrize("search_dict, mock_documents, expected_result", [
     ({}, [], []),  # Empty collection with default search_dict
@@ -56,3 +54,12 @@ def test_find_documents_from_collection(search_dict, mock_documents, expected_re
     
     assert result == expected_result
     mock_collection.find.assert_called_once_with(search_dict)
+
+def test_find_documents_from_collection_handles_exceptions():
+    mock_collection = MagicMock()
+    mock_collection.find.side_effect = Exception("Database error")
+    
+    with pytest.raises(Exception, match="Database error"):
+        find_documents_from_collection(mock_collection)
+    
+    mock_collection.find.assert_called_once_with({})
