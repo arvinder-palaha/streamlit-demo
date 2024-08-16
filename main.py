@@ -41,33 +41,3 @@ hour_to_filter = st.slider('hour', 0, 23, 17)  # min: 0h, max: 23h, default: 17h
 filtered_data = data[data[DATE_COLUMN].dt.hour == hour_to_filter]
 st.subheader(f'Map of all pickups at {hour_to_filter}:00')
 st.map(filtered_data)
-
-
-# Initialize connection.
-# Uses st.cache_resource to only run once.
-@st.cache_resource
-def init_connection():
-    return pymongo.MongoClient(**st.secrets["mongo"])
-
-client = init_connection()
-
-input = st.text_input("Inspect database with comma separated keys:")
-
-st.write(input)
-st.write(len(input))
-input_keys = parse_db_inspect_input(input)
-num_input_keys = len(input_keys)
-
-if num_input_keys==0:
-    st.write(client.list_database_names())
-if num_input_keys==1:
-    st.write(client[input_keys[0]].list_collection_names())
-if num_input_keys==2:
-    collection = client[input_keys[0]][input_keys[1]]
-    documents = find_documents_from_collection(collection)
-    st.write(documents)
-if num_input_keys==3:
-    collection = client[input_keys[0]][input_keys[1]]
-    search_key = ast.literal_eval(input_keys[2])
-    documents = find_documents_from_collection(collection, search_key)
-    st.write(documents)    
