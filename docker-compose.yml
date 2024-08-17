@@ -14,3 +14,12 @@ services:
             - MONGO_INITDB_ROOT_PASSWORD=pass1
         volumes:
           - ./db_data/:/data/db/
+
+    # streamlit:
+    #     build:
+    #         dockerfile: ./dockerfile.streamlit
+    #         context: ./
+    #     ports:
+    #         - "8501:8501"
+    #     depends_on:
+    #         - mongo
