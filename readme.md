@@ -30,6 +30,6 @@ Can connect via mongodb compass with connection string: `mongodb://localhost:270
 - [X] mongodb access in streamlit app
 - [x] explore mongodb database
 - [x] upload json blob to DB
-- [ ] upload csv to DB
+- [x] upload csv to DB
 - [ ] dockerise the streamlit server
 - [X] dockerise the mongodb server
