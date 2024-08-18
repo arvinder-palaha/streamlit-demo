@@ -33,3 +33,4 @@ Can connect via mongodb compass with connection string: `mongodb://localhost:270
 - [x] upload csv to DB
 - [ ] dockerise the streamlit server
 - [X] dockerise the mongodb server
+- [ ] delete entries
